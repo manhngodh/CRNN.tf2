@@ -31,10 +31,10 @@ def vgg_style(input_tensor):
     return x
 
 
-def build_model(num_classes, image_width=None, channels=1):
+def build_model(num_classes, image_width=None, image_height=None, channels=1):
     """build CNN-RNN model"""
 
-    img_input = keras.Input(shape=(32, image_width, channels))
+    img_input = keras.Input(shape=(image_height, image_width, channels))
     x = vgg_style(img_input)
     x = layers.Reshape((-1, 512))(x)
     x = layers.Bidirectional(layers.LSTM(units=256, return_sequences=True))(x)
