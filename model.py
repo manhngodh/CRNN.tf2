@@ -37,7 +37,6 @@ def build_model(num_classes, image_width=None, channels=1):
     img_input = keras.Input(shape=(32, image_width, channels))
     x = vgg_style(img_input)
     x = layers.Reshape((-1, 512))(x)
-
     x = layers.Bidirectional(layers.LSTM(units=256, return_sequences=True))(x)
     x = layers.Bidirectional(layers.LSTM(units=256, return_sequences=True))(x)
     x = layers.Dense(units=num_classes)(x)

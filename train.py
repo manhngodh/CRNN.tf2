@@ -10,38 +10,41 @@ from losses import CTCLoss
 from metrics import WordAccuracy
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-ta', '--train_ann_paths', type=str, 
-                    required=True, nargs='+', 
+parser.add_argument('-ta', '--train_ann_paths', type=str, nargs='+',
                     help='The path of training data annnotation file.')
-parser.add_argument('-va', '--val_ann_paths', type=str, nargs='+', 
+parser.add_argument('-va', '--val_ann_paths', type=str, nargs='+',
                     help='The path of val data annotation file.')
-parser.add_argument('-t', '--table_path', type=str, required=True, 
-                    help='The path of table file.')
-parser.add_argument('-w', '--img_width', type=int, default=100, 
+parser.add_argument('-t', '--table_path', type=str, help='The path of table file.')
+parser.add_argument('-w', '--img_width', type=int, default=100,
                     help='Image width, this parameter will affect the output '
                          'shape of the model, default is 100, so this model '
                          'can only predict up to 24 characters.')
-parser.add_argument('-b', '--batch_size', type=int, default=256, 
+parser.add_argument('-b', '--batch_size', type=int, default=256,
                     help='Batch size.')
-parser.add_argument('-lr', '--learning_rate', type=float, default=0.001, 
+parser.add_argument('-lr', '--learning_rate', type=float, default=0.001,
                     help='Learning rate.')
-parser.add_argument('-e', '--epochs', type=int, default=30, 
+parser.add_argument('-e', '--epochs', type=int, default=30,
                     help='Num of epochs to train.')
-parser.add_argument('--img_channels', type=int, default=1, 
+parser.add_argument('--img_channels', type=int, default=1,
                     help='0: Use the number of channels in the image, '
                          '1: Grayscale image, 3: RGB image')
-parser.add_argument('--ignore_case', action='store_true', 
+parser.add_argument('--ignore_case', action='store_true',
                     help='Whether ignore case.(default false)')
-parser.add_argument('--restore', type=str, 
+parser.add_argument('--restore', type=str,
                     help='The model for restore, even if the number of '
                          'characters is different')
 args = parser.parse_args()
 
+img_width = 1024
+img_height = 4096
+img_channels = 3
+batch_size = 256
+
 localtime = time.asctime()
-dataset_builder = DatasetBuilder(args.table_path, args.img_width, 
-                  args.img_channels, args.ignore_case)
-train_ds, train_size = dataset_builder.build(args.train_ann_paths, True, 
-                                             args.batch_size)
+dataset_builder = DatasetBuilder('data/table.txt', img_width, img_height, img_channels, True)
+
+train_ds, train_size = dataset_builder.build(['data/annotation.txt'], True, batch_size)
+
 print('Num of training samples: {}'.format(train_size))
 saved_model_prefix = '{epoch:03d}_{word_accuracy:.4f}'
 if args.val_ann_paths:
@@ -56,7 +59,7 @@ saved_model_path = ('saved_models/{}/'.format(localtime) +
 os.makedirs('saved_models/{}'.format(localtime))
 print('Training start at {}'.format(localtime))
 
-model = build_model(dataset_builder.num_classes, channels=args.img_channels)
+model = build_model(dataset_builder.num_classes, channels=3)
 model.compile(optimizer=keras.optimizers.Adam(args.learning_rate),
               loss=CTCLoss(), metrics=[WordAccuracy()])
 
@@ -66,5 +69,4 @@ if args.restore:
 callbacks = [keras.callbacks.ModelCheckpoint(saved_model_path),
              keras.callbacks.TensorBoard(log_dir='logs/{}'.format(localtime),
                                          profile_batch=0)]
-model.fit(train_ds, epochs=args.epochs, callbacks=callbacks,
-          validation_data=val_ds)
+model.fit(train_ds, epochs=args.epochs, callbacks=callbacks, validation_data=val_ds)
