@@ -40,7 +40,7 @@ def read_annotations(paths):
     labels = []
     for path in paths:
         part_img_paths, part_labels = read_annotation(path)
-        img_paths.extend(part_img_paths)
+        img_paths.extend('images/' + part_img_paths)
         labels.extend(part_labels)
     return img_paths, labels
 
