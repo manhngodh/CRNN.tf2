@@ -41,9 +41,9 @@ img_channels = 3
 batch_size = 256
 
 localtime = time.asctime()
-dataset_builder = DatasetBuilder('data/table.txt', img_width, img_height, img_channels, True)
+dataset_builder = DatasetBuilder('ourdata/table.txt', img_width, img_height, img_channels, True)
 
-train_ds, train_size = dataset_builder.build(['data/annotation.txt'], True, batch_size)
+train_ds, train_size = dataset_builder.build(['ourdata/annotation.txt'], True, batch_size)
 
 print('Num of training samples: {}'.format(train_size))
 saved_model_prefix = '{epoch:03d}_{word_accuracy:.4f}'
