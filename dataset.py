@@ -13,24 +13,12 @@ def read_annotation(path):
     print(f'Annotation path: {path}, format: ', end='')
     with open(path) as f:
         line = f.readline().strip()
-        if re.fullmatch(r'.*/*\d+_.+_(\d+)\.\w+ \1', line):
-            print('MJSynth')
-            content = [l.strip().split() for l in f.readlines() + [line]]
-            img_paths, labels = zip(*content)
-            labels = [path.split('_')[1] for path in img_paths]
-        elif re.fullmatch(r'.*/*word_\d\.\w+, ".+"', line):
-            print('ICDAR2013')
-            content = [l.strip().split(',') for l in f.readlines() + [line]]
-            img_paths, labels = zip(*content)
-            labels = [label.strip(' "') for label in labels]
-        elif re.fullmatch(r'.+\.\w+ .+', line):
-            print('[image path] label')
-            content = [l.strip().split() for l in f.readlines() + [line]]
-            img_paths, labels = zip(*content)
-        else:
-            raise UnsupportedFormatError('Unsupported annotation format')
+        print('[image path] label')
+        content = [l.strip('\n').split(" ", 1) for l in f.readlines() + [line]]
+        img_paths, labels = zip(*content)
     dirname = os.path.dirname(path)
     img_paths = [os.path.join(dirname, img_path) for img_path in img_paths]
+    print(labels)
     return img_paths, labels
 
 
