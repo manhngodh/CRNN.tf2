@@ -16,7 +16,7 @@ def read_annotation(path):
         print('[image path] label')
         content = [l.strip('\n').split(" ", 1) for l in f.readlines() + [line]]
         img_paths, labels = zip(*content)
-    dirname = os.path.dirname(path)
+    dirname = os.path.dirname(path[0])
     img_paths = [os.path.join(dirname, 'images', img_path) for img_path in img_paths]
     print(labels)
     return img_paths, labels
