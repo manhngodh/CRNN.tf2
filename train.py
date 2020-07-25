@@ -35,13 +35,14 @@ parser.add_argument('--restore', type=str,
                          'characters is different')
 args = parser.parse_args()
 
-img_width = 1024
-img_height = 4096
+img_width = 840
+img_height = 840
 img_channels = 3
-batch_size = 256
+batch_size = 5
+letters = "² #'()\"[]+,-./:0123456789ABCDEFGHIJKLMNOPQRSTUVWXYabcdeghiklmnopqrstuvxyzÂÊÔàáâãèéêìíòóôõùúýăĐđĩũƠơưạảấầẩậắằẵặẻẽếềểễệỉịọỏốồổỗộớờởỡợụủỨứừửữựỳỵỷỹ"
 
 localtime = time.asctime()
-dataset_builder = DatasetBuilder('our_data/table.txt', img_width, img_height, img_channels, True)
+dataset_builder = DatasetBuilder(letters, img_width, img_height, img_channels)
 
 train_ds, train_size = dataset_builder.build(['our_data/annotation.txt'], True, batch_size)
 
@@ -69,4 +70,5 @@ if args.restore:
 callbacks = [keras.callbacks.ModelCheckpoint(saved_model_path),
              keras.callbacks.TensorBoard(log_dir='logs/{}'.format(localtime),
                                          profile_batch=0)]
+
 model.fit(train_ds, epochs=args.epochs, callbacks=callbacks, validation_data=val_ds)

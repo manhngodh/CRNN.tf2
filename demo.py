@@ -7,9 +7,9 @@ from tensorflow import keras
 from dataset import Decoder
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-i', '--images', type=str, required=True, 
+parser.add_argument('-i', '--images_src', type=str, required=True,
                     help='Image file or folder path.')
-parser.add_argument('-t', '--table_path', type=str, required=True, 
+parser.add_argument('-t', '--table_path', type=str, required=True,
                     help='The path of table file.')
 parser.add_argument('-w', '--img_width', type=int, default=100, 
                     help='Image width, this parameter will affect the output '

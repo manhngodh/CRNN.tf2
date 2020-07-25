@@ -14,10 +14,11 @@ def read_annotation(path):
     with open(path[0]) as f:
         line = f.readline().strip()
         print('[image path] label')
-        content = [l.strip('\n').split(" ", 1) for l in f.readlines() + [line]]
+        content = [l.strip('\n').split(" ", 1) for l in f.readlines()]
         img_paths, labels = zip(*content)
     dirname = os.path.dirname(path[0])
-    img_paths = [os.path.join(dirname, 'images', img_path) for img_path in img_paths]
+    img_paths = [img_path for img_path in img_paths]
+    labels = [label for label in labels]
     print(labels)
     return img_paths, labels
 
@@ -34,10 +35,10 @@ def read_annotations(paths):
 
 
 class DatasetBuilder:
-    def __init__(self, table_path, img_width, img_height, img_channels, ignore_case=False):
-        self.table = tf.lookup.StaticHashTable(tf.lookup.TextFileInitializer(
-            table_path, tf.string, tf.lookup.TextFileIndex.WHOLE_LINE,
-            tf.int64, tf.lookup.TextFileIndex.LINE_NUMBER), -1)
+    def __init__(self, letters, img_width, img_height, img_channels, ignore_case=False):
+        letters = list(letters)
+        indices = tf.range(len(letters), dtype=tf.int64)
+        self.table = tf.lookup.StaticHashTable(tf.lookup.KeyValueTensorInitializer(letters, indices), -1)
         self.img_width = img_width
         self.img_height = img_height
         self.img_channels = img_channels
