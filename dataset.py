@@ -17,7 +17,7 @@ def read_annotation(path):
         content = [l.strip('\n').split(" ", 1) for l in f.readlines() + [line]]
         img_paths, labels = zip(*content)
     dirname = os.path.dirname(path)
-    img_paths = [os.path.join(dirname, img_path) for img_path in img_paths]
+    img_paths = [os.path.join(dirname, 'images', img_path) for img_path in img_paths]
     print(labels)
     return img_paths, labels
 
@@ -61,7 +61,7 @@ class DatasetBuilder:
         """
         build dataset, it will auto detect each annotation file's format.
         """
-        img_paths, labels = read_annotations(ann_paths)
+        img_paths, labels = read_annotation(ann_paths)
         if self.ignore_case:
             labels = [label.lower() for label in labels]
         size = len(img_paths)
