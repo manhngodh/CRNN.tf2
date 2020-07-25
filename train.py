@@ -59,7 +59,7 @@ saved_model_path = ('saved_models/{}/'.format(localtime) +
 os.makedirs('saved_models/{}'.format(localtime))
 print('Training start at {}'.format(localtime))
 
-model = build_model(dataset_builder.num_classes, channels=3)
+model = build_model(dataset_builder.num_classes, img_width, img_height, channels=3)
 model.compile(optimizer=keras.optimizers.Adam(args.learning_rate),
               loss=CTCLoss(), metrics=[WordAccuracy()])
 
