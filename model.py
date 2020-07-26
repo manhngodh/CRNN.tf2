@@ -36,10 +36,11 @@ def build_model(num_classes, image_width=None, image_height=None, channels=1):
 
     img_input = keras.Input(shape=(image_height, image_width, channels))
     backbone = keras.applications.ResNet50V2(
-        include_top=False, weights='imagenet'
+        include_top=False, weights='imagenet', input_tensor=img_input
     )
+    x = backbone(img_input)
     # x = vgg_style(img_input)
-    x = layers.Reshape((-1, 512))(backbone)
+    x = layers.Reshape((-1, 2048))(x)
     x = layers.Bidirectional(layers.LSTM(units=256, return_sequences=True))(x)
     x = layers.Bidirectional(layers.LSTM(units=256, return_sequences=True))(x)
     x = layers.Dense(units=num_classes)(x)
