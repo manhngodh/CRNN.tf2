@@ -35,8 +35,11 @@ def build_model(num_classes, image_width=None, image_height=None, channels=1):
     """build CNN-RNN model"""
 
     img_input = keras.Input(shape=(image_height, image_width, channels))
-    x = vgg_style(img_input)
-    x = layers.Reshape((-1, 512))(x)
+    backbone = keras.applications.ResNet50V2(
+        include_top=False, weights='imagenet'
+    )
+    # x = vgg_style(img_input)
+    x = layers.Reshape((-1, 512))(backbone)
     x = layers.Bidirectional(layers.LSTM(units=256, return_sequences=True))(x)
     x = layers.Bidirectional(layers.LSTM(units=256, return_sequences=True))(x)
     x = layers.Dense(units=num_classes)(x)
