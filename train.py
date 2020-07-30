@@ -44,7 +44,7 @@ letters = "² #'()\"[]+,-./:0123456789ABCDEFGHIJKLMNOPQRSTUVWXYabcdeghiklmnopqrs
 localtime = time.asctime()
 dataset_builder = DatasetBuilder(letters, img_width, img_height, img_channels)
 
-train_ds, train_size = dataset_builder.build(['our_data/annotation.txt'], True, batch_size)
+train_ds, train_size = dataset_builder.build(['data/annotation.txt'], True, batch_size)
 
 print('Num of training samples: {}'.format(train_size))
 saved_model_prefix = '{epoch:03d}_{word_accuracy:.4f}'
