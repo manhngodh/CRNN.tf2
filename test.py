@@ -1,4 +1,5 @@
 import os
+import shutil
 import time
 import tensorflow as tf
 
@@ -11,13 +12,18 @@ def split_image():
     image_names = os.listdir("data/src_images")
     src_path = 'data/src_annotation.txt'
     dst_path = "data/annotation.txt"
-    with open(src_path, "r") as src_file:
+    try:
+        shutil.rmtree("data/images")
+    except Exception as e:
+        print(e)
+    os.makedirs("data/images", exist_ok=True)
+    with open(src_path, "r", encoding="utf8") as src_file:
         print('[image path] label')
         content = [l.strip('\n').split(" ", 1) for l in src_file.readlines()]
         img_paths, labels = zip(*content)
         dirname = os.path.dirname(src_path)
         img_paths = [os.path.join(dirname, 'src_images', img_path) for img_path in img_paths]
-        with open(dst_path, "w") as dst_file:
+        with open(dst_path, "w", encoding="utf8") as dst_file:
             for img_path, label in zip(img_paths, labels):
                 image = cv2.imread(img_path)
                 ratio = image.shape[0] / image.shape[1]
