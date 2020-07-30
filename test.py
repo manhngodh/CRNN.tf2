@@ -8,15 +8,15 @@ from model import vgg_style
 
 
 def split_image():
-    image_names = os.listdir("our_data/images_src")
-    src_path = 'our_data/src_annotation.txt'
-    dst_path = "our_data/annotation.txt"
+    image_names = os.listdir("data/src_images")
+    src_path = 'data/src_annotation.txt'
+    dst_path = "data/annotation.txt"
     with open(src_path, "r") as src_file:
         print('[image path] label')
         content = [l.strip('\n').split(" ", 1) for l in src_file.readlines()]
         img_paths, labels = zip(*content)
         dirname = os.path.dirname(src_path)
-        img_paths = [os.path.join(dirname, 'images_src', img_path) for img_path in img_paths]
+        img_paths = [os.path.join(dirname, 'src_images', img_path) for img_path in img_paths]
         with open(dst_path, "w") as dst_file:
             for img_path, label in zip(img_paths, labels):
                 image = cv2.imread(img_path)
@@ -25,13 +25,13 @@ def split_image():
                 image_src = cv2.resize(image, (840, int(840 * ratio)))
 
                 start = 840 + 420
-                dst_img_path = f'our_data/images/{round(time.time() * 1000000)}.jpg'
+                dst_img_path = f'data/images/{round(time.time() * 1000000)}.jpg'
                 image = image_src[start:start + 840, :]
                 cv2.imwrite(dst_img_path, image)
                 dst_file.write(f'{dst_img_path} {label}\n')
 
                 start += 420
-                dst_img_path = f'our_data/images/{round(time.time() * 1000000)}.jpg'
+                dst_img_path = f'data/images/{round(time.time() * 1000000)}.jpg'
                 image = image_src[start:start + 840, :]
                 cv2.imwrite(dst_img_path, image)
                 dst_file.write(f'{dst_img_path} {label}\n')
