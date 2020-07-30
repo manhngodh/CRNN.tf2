@@ -7,7 +7,7 @@ import cv2
 from model import vgg_style
 
 
-def split_image(image):
+def split_image():
     image_names = os.listdir("our_data/images_src")
     src_path = 'our_data/src_annotation.txt'
     dst_path = "our_data/annotation.txt"
@@ -74,5 +74,4 @@ if __name__ == '__main__':
     # out = vgg_style(img_input)
     # model = tf.keras.Model(inputs=img_input, outputs=out)
     # backbone.summary()
-    x = build_model(141, 840, 840, 3)
-    x.summary()
+    split_image()
