@@ -23,7 +23,7 @@ parser.add_argument('-b', '--batch_size', type=int, default=256,
                     help='Batch size.')
 parser.add_argument('-lr', '--learning_rate', type=float, default=0.001,
                     help='Learning rate.')
-parser.add_argument('-e', '--epochs', type=int, default=30,
+parser.add_argument('-e', '--epochs', type=int, default=300,
                     help='Num of epochs to train.')
 parser.add_argument('--img_channels', type=int, default=1,
                     help='0: Use the number of channels in the image, '
