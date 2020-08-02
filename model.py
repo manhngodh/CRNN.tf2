@@ -43,5 +43,5 @@ def build_model(num_classes, image_width=None, image_height=None, channels=1):
     x = layers.Reshape((-1, 2048))(x)
     x = layers.Bidirectional(layers.LSTM(units=512, return_sequences=True))(x)
     # x = layers.Bidirectional(layers.LSTM(units=256, return_sequences=True))(x)
-    x = layers.Dense(units=num_classes, activation='softmax')(x)
+    x = layers.Dense(units=num_classes)(x)
     return keras.Model(inputs=img_input, outputs=x, name='CRNN')

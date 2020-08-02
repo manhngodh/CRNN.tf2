@@ -11,7 +11,7 @@ class UnsupportedFormatError(Exception):
 def read_annotation(path):
     """Read an annotation file to get image paths and labels."""
     print(f'Annotation path: {path}, format: ', end='')
-    with open(path[0]) as f:
+    with open(path[0], encoding='utf8') as f:
         line = f.readline().strip()
         print('[image path] label')
         content = [l.strip('\n').split(" ", 1) for l in f.readlines()]
