@@ -25,22 +25,23 @@ def split_image(data_path):
         img_paths = [os.path.join(dirname, 'src_images', img_path) for img_path in img_paths]
         with open(dst_path, "w", encoding="utf8") as dst_file:
             for img_path, label in zip(img_paths, labels):
-                start_view = 840 + 420
+                start_view = 1024 + 512
                 image = cv2.imread(img_path)
                 image = preprocess(image)
-                ratio = image.shape[0] / image.shape[1]
+#                 ratio = image.shape[0] / image.shape[1]
 
-                image_src = cv2.resize(image, (840, int(840 * ratio)))
+#                 image_src = cv2.resize(image, (840, int(840 * ratio)))
+                image_src = image
 
-                start_view = start_view + 420
+                start_view = start_view + 512
                 dst_img_path = f'data/images/{round(time.time() * 1000000)}.jpg'
-                image = image_src[start_view:start_view + 840, :]
+                image = image_src[start_view:start_view + 1024, :]
                 cv2.imwrite(dst_img_path, image)
                 dst_file.write(f'{dst_img_path} {label}\n')
 
-                start_view += 420
+                start_view += 512
                 dst_img_path = f'data/images/{round(time.time() * 1000000)}.jpg'
-                image = image_src[start_view:start_view + 840, :]
+                image = image_src[start_view:start_view + 512, :]
                 cv2.imwrite(dst_img_path, image)
                 dst_file.write(f'{dst_img_path} {label}\n')
 
