@@ -9,8 +9,8 @@ from image_preprocessing import preprocess
 from model import vgg_style
 
 
-def split_image():
-    src_path = 'data/src_annotation.txt'
+def split_image(data_path):
+    src_path = f'{data_path}/src_annotation.txt'
     dst_path = "data/annotation.txt"
     try:
         shutil.rmtree("data/images")
@@ -82,4 +82,4 @@ if __name__ == '__main__':
     # out = vgg_style(img_input)
     # model = tf.keras.Model(inputs=img_input, outputs=out)
     # backbone.summary()
-    split_image()
+    split_image('our_data')
