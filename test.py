@@ -5,11 +5,11 @@ import tensorflow as tf
 
 import cv2
 
+from image_preprocessing import preprocess
 from model import vgg_style
 
 
 def split_image():
-    image_names = os.listdir("data/src_images")
     src_path = 'data/src_annotation.txt'
     dst_path = "data/annotation.txt"
     try:
@@ -27,6 +27,7 @@ def split_image():
             for img_path, label in zip(img_paths, labels):
                 start_view = 840 + 420
                 image = cv2.imread(img_path)
+                image = preprocess(image)
                 ratio = image.shape[0] / image.shape[1]
 
                 image_src = cv2.resize(image, (840, int(840 * ratio)))
